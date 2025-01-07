@@ -1,4 +1,4 @@
-List of State Options
+State 选项列表
 =====================
 
 State Modes

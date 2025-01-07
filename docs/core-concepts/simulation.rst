@@ -1,85 +1,46 @@
-Simulation  and Instrumentation
-===============================
+模拟（Simulation）与相关工具（Instrumentation）
+====================================
 
-When you ask for a step of execution to happen in angr, something has to
-actually perform the step. angr uses a series of engines (subclasses of the
-``SimEngine`` class) to emulate the effects that of a given section of code has
-on an input state. The execution core of angr simply tries all the available
-engines in sequence, taking the first one that is able to handle the step. The
-following is the default list of engines, in order:
+当你要求在 angr 中 step 执行时，必须有某些东西实际执行这个步骤。angr 使用一系列引擎（具体种类可在 ``SimEngine`` 类的子类中查看）来模拟给定代码段对输入状态的影响。angr 的执行核心只是按顺序尝试所有可用的引擎，选择第一个能够处理该步骤的引擎。以下是默认的引擎列表，按顺序排列：
 
-
-* The failure engine kicks in when the previous step took us to some
-  uncontinuable state
-* The syscall engine kicks in when the previous step ended in a syscall
-* The hook engine kicks in when the current address is hooked
-* The unicorn engine kicks in when the ``UNICORN`` state option is enabled and
-  there is no symbolic data in the state
-* The VEX engine kicks in as the final fallback.
+* 当上一步导致我们进入某个无法继续的状态时，失败引擎会启动
+* 当上一步以系统调用结束时，系统调用引擎会启动
+* 当当前地址被挂钩时，挂钩引擎会启动
+* 当启用了 ``UNICORN`` 状态选项且状态中没有符号数据时，Unicorn 引擎会启动
+* VEX 引擎作为最终的后备引擎启动。
 
 SimSuccessors
 -------------
 
-The code that actually tries all the engines in turn is
-``project.factory.successors(state, **kwargs)``, which passes its arguments onto
-each of the engines. This function is at the heart of ``state.step()`` and
-``simulation_manager.step()``. It returns a SimSuccessors object, which we
-discussed briefly before. The purpose of SimSuccessors is to perform a simple
-categorization of the successor states, stored in various list attributes. They
-are:
+实际依次尝试所有引擎的代码是 ``project.factory.successors(state, **kwargs)``，它将其参数传递给每个引擎。这个函数是 ``state.step()`` 和 ``simulation_manager.step()`` 的核心。它返回一个 SimSuccessors 对象，我们之前简要讨论过。SimSuccessors 的目的是对后继状态进行简单分类，存储在各种列表属性中。它们是：
 
 .. list-table::
-   :header-rows: 1
+  :header-rows: 1
 
-   * - Attribute
-     - Guard Condition
-     - Instruction Pointer
-     - Description
-   * - ``successors``
-     - True (can be symbolic, but constrained to True)
-     - Can be symbolic (but 256 solutions or less; see
-       ``unconstrained_successors``).
-     - A normal, satisfiable successor state to the state processed by the
-       engine. The instruction pointer of this state may be symbolic (i.e., a
-       computed jump based on user input), so the state might actually represent
-       *several* potential continuations of execution going forward.
-   * - ``unsat_successors``
-     - False (can be symbolic, but constrained to False).
-     - Can be symbolic.
-     - Unsatisfiable successors. These are successors whose guard conditions can
-       only be false (i.e., jumps that cannot be taken, or the default branch of
-       jumps that *must* be taken).
-   * - ``flat_successors``
-     - True (can be symbolic, but constrained to True).
-     - Concrete value.
-     - As noted above, states in the ``successors`` list can have symbolic
-       instruction pointers. This is rather confusing, as elsewhere in the code
-       (i.e., in ``SimEngineVEX.process``, when it's time to step that state
-       forward), we make assumptions that a single program state only represents
-       the execution of a single spot in the code. To alleviate this, when we
-       encounter states in ``successors`` with symbolic instruction pointers, we
-       compute all possible concrete solutions (up to an arbitrary threshold of
-       256) for them, and make a copy of the state for each such solution. We
-       call this process "flattening". These ``flat_successors`` are states,
-       each of which has a different, concrete instruction pointer. For example,
-       if the instruction pointer of a state in ``successors`` was ``X+5``,
-       where ``X`` had constraints of ``X > 0x800000`` and ``X <= 0x800010``, we
-       would flatten it into 16 different ``flat_successors`` states, one with
-       an instruction pointer of ``0x800006``, one with ``0x800007``, and so on
-       until ``0x800015``.
-   * - ``unconstrained_successors``
-     - True (can be symbolic, but constrained to True).
-     - Symbolic (with more than 256 solutions).
-     - During the flattening procedure described above, if it turns out that
-       there are more than 256 possible solutions for the instruction pointer,
-       we assume that the instruction pointer has been overwritten with
-       unconstrained data (i.e., a stack overflow with user data). *This
-       assumption is not sound in general*. Such states are placed in
-       ``unconstrained_successors`` and not in ``successors``.
-   * - ``all_successors``
-     - Anything
-     - Can be symbolic.
-     - This is ``successors + unsat_successors + unconstrained_successors``.
+  * - 属性
+    - 守护条件
+    - 指令指针
+    - 描述
+  * - ``successors``
+    - True（可以是符号的，但受限于 True）
+    - 可以是符号的（但最多有 256 个解；参见 ``unconstrained_successors``）。
+    - 引擎处理的状态的正常、可满足的后继状态。该状态的指令指针可能是符号的（即基于用户输入的计算跳转），因此该状态实际上可能代表 *多个* 潜在的执行继续。
+  * - ``unsat_successors``
+    - False（可以是符号的，但受限于 False）。
+    - 可以是符号的。
+    - 不可满足的后继状态。这些是守护条件只能为假的后继状态（即不能跳转的跳转，或必须跳转的跳转的默认分支）。
+  * - ``flat_successors``
+    - True（可以是符号的，但受限于 True）。
+    - 具体值。
+    - 如上所述，``successors`` 列表中的状态可以具有符号指令指针。这相当混乱，因为在代码的其他地方（即在 ``SimEngineVEX.process`` 中，当需要将该状态向前推进时），我们假设单个程序状态仅代表代码中的单个位置的执行。为了解决这个问题，当我们在 ``successors`` 中遇到具有符号指令指针的状态时，我们为它们计算所有可能的具体解（最多 256 个），并为每个解制作状态的副本。我们称这个过程为“扁平化”。这些 ``flat_successors`` 是每个具有不同具体指令指针的状态。例如，如果 ``successors`` 中的状态的指令指针是 ``X+5``，其中 ``X`` 的约束是 ``X > 0x800000`` 和 ``X <= 0x800010``，我们会将其扁平化为 16 个不同的 ``flat_successors`` 状态，一个指令指针为 ``0x800006``，一个为 ``0x800007``，依此类推，直到 ``0x800015``。
+  * - ``unconstrained_successors``
+    - True（可以是符号的，但受限于 True）。
+    - 符号的（超过 256 个解）。
+    - 在上述扁平化过程中，如果发现指令指针有超过 256 个可能的解，我们假设指令指针已被不受约束的数据覆盖（即用户数据的堆栈溢出）。*这种假设在一般情况下是不可靠的*。这些状态被放置在 ``unconstrained_successors`` 中，而不是 ``successors`` 中。
+  * - ``all_successors``
+    - 任何
+    - 可以是符号的。
+    - 这是 ``successors + unsat_successors + unconstrained_successors``。
 
 
 Breakpoints
@@ -111,8 +72,7 @@ cool! A point is set as follows:
    # or, you can have it drop you in an embedded IPython!
    >>> s.inspect.b('mem_write', when=angr.BP_AFTER, action=angr.BP_IPYTHON)
 
-There are many other places to break than a memory write. Here is the list. You
-can break at BP_BEFORE or BP_AFTER for each of these events.
+除了内存写入之外，还有许多其他地方可以中断。以下是列表。你可以在每个事件的 BP_BEFORE 或 BP_AFTER 处中断。
 
 .. list-table::
    :header-rows: 1
@@ -387,9 +347,7 @@ These events expose different attributes:
      - The SimSuccessors object defining the result of the engine.
 
 
-These attributes can be accessed as members of ``state.inspect`` during the
-appropriate breakpoint callback to access the appropriate values. You can even
-modify these value to modify further uses of the values!
+在对应断点 callback 函数内，这些属性可以作为 ``state.inspect`` 的成员被访问。你甚至可以修改这些成员的值，并进一步使用！
 
 .. code-block:: python
 
@@ -398,8 +356,7 @@ modify these value to modify further uses of the values!
    ...
    >>> s.inspect.b('mem_read', when=angr.BP_AFTER, action=track_reads)
 
-Additionally, each of these properties can be used as a keyword argument to
-``inspect.b`` to make the breakpoint conditional:
+此外，这些属性中的每一个都可以作为 ``inspect.b`` 的关键字参数，使断点具有条件性：
 
 .. code-block:: python
 
@@ -412,7 +369,7 @@ Additionally, each of these properties can be used as a keyword argument to
    # This will break after instruction 0x8000, but only 0x1000 is a possible value of the last expression that was read from memory
    >>> s.inspect.b('instruction', when=angr.BP_AFTER, instruction=0x8000, mem_read_expr=0x1000)
 
-Cool stuff! In fact, we can even specify a function as a condition:
+很酷的东西！事实上，我们甚至可以指定一个函数作为条件：
 
 .. code-block:: python
 
@@ -423,20 +380,13 @@ Cool stuff! In fact, we can even specify a function as a condition:
 
    >>> s.inspect.b('mem_write', condition=cond)
 
-That is some cool stuff!
+这是一些很酷的东西！
 
-Caution about ``mem_read`` breakpoint
+关于 ``mem_read`` 断点的注意事项
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``mem_read`` breakpoint gets triggered anytime there are memory reads by
-either the executing program or the binary analysis. If you are using breakpoint
-on ``mem_read`` and also using ``state.mem`` to load data from memory addresses,
-then know that the breakpoint will be fired as you are technically reading
-memory.
+在执行程序时或在二进制分析时进行内存读取， ``mem_read`` 断点都会被触发。如果你在使用 ``mem_read`` 断点的同时也使用 ``state.mem`` 从内存地址加载数据，那么请注意，断点会被触发，因为你实际上是在读取内存。
 
-So if you want to load data from memory and not trigger any ``mem_read``
-breakpoint you have had set up, then use ``state.memory.load`` with the keyword
-arguments ``disable_actions=True`` and ``inspect=False``.
+因此，如果你想从内存加载数据而不触发任何已设置的 ``mem_read`` 断点，请使用 ``state.memory.load``，并带上关键字参数 ``disable_actions=True`` 和 ``inspect=False``。
 
-This is also true for ``state.find`` and you can use the same keyword arguments
-to prevent ``mem_read`` breakpoints from firing.
+这同样适用于 ``state.find``，你可以使用相同的关键字参数来防止触发 ``mem_read`` 断点。

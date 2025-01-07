@@ -1,4 +1,4 @@
-Symbolic Expressions and Constraint Solving
+符号表达式与约束求解
 ===========================================
 
 angr's power comes not from it being an emulator, but from being able to execute

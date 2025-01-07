@@ -1,4 +1,4 @@
-Intermediate Representation
+中间代码（Intermediate Representation, IR）
 ===========================
 
 In order to be able to analyze and execute machine code from different CPU

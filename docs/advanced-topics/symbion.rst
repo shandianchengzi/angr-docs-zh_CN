@@ -1,4 +1,4 @@
-Symbion: Interleaving symbolic and concrete execution
+Symbion：交错符号执行和具体执行
 =====================================================
 
 Let's suppose you want to symbolically analyze a specific function of a program,

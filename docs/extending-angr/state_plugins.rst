@@ -1,4 +1,4 @@
-State Plugins
+状态插件（State Plugins）
 =============
 
 If you want to store some data on a state and have that information propagated

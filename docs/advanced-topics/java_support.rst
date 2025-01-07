@@ -1,9 +1,7 @@
-Java Support
+Java 支持
 ============
 
-``angr`` also supports symbolically executing Java code and Android apps! This
-also includes Android apps using a combination of compiled Java and native
-(C/C++) code.
+``angr`` 还支持符号执行 Java 代码和 Android 应用程序！这也包括使用编译的 Java 和本地 (C/C++) 代码组合的 Android 应用程序。
 
 .. warning::
    Java support is experimental! Contribution from the community is highly

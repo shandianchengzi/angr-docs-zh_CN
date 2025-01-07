@@ -1,4 +1,4 @@
-List of Claripy Operations
+Claripy 操作列表
 ==========================
 
 Arithmetic and Logic

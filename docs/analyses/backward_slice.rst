@@ -1,4 +1,4 @@
-Backward Slicing
+后向切片（Backward Slicing）
 ================
 
 A *program slice* is a subset of statements that is obtained from the original

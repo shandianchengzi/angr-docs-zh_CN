@@ -1,14 +1,9 @@
-What's Up With Mixins, Anyway?
+Mixins 到底是啥，是怎么回事？
 ==============================
 
-If you are trying to work more intently with the deeper parts of angr, you will
-need to understand one of the design patterns we use frequently: the mixin
-pattern.
+如果你想更深入地研究 angr 的核心部分，你需要了解我们经常使用的一种设计模式：mixin 模式。
 
-In brief, the mixin pattern is where Python's subclassing features is used not
-to implement IS-A relationships (a Child is a kind of Person) but instead to
-implement pieces of functionality for a type in different classes to make more
-modular and maintainable code. Here's an example of the mixin pattern in action:
+简而言之，mixin 模式是使用 Python 的子类化特性，不是为了实现 IS-A 关系（例如，Child 是 Person 的一种），而是为了在不同的类中实现类型的功能片段，以创建更模块化和可维护的代码。以下是 mixin 模式的一个示例：
 
 .. code-block:: python
 

@@ -1,17 +1,12 @@
-Extending the Environment Model
+补全环境依赖
 ===============================
 
-One of the biggest issues you may encounter while using angr to analyze programs
-is an incomplete model of the environment, or the APIs, surrounding your
-program. This usually takes the form of syscalls or dynamic library calls, or in
-rare cases, loader artifacts. angr provides a convenient interface to do most of
-these things!
+在使用 angr 分析程序时，你可能遇到的最大问题之一是环境或围绕程序的 API 模型不完整。这通常表现为系统调用或动态库调用缺失，或者在极少数情况下，加载器都丢了。angr 提供了一个方便的接口来处理大多数这些问题！
 
-Everything discussed here involves writing SimProcedures, so :ref:`make sure you
-know how to do that! <Hooks and SimProcedures>`.
+这里讨论的所有内容都涉及编写 SimProcedures，所以请确保你知道如何编写:ref:`make sure you
+know how to do that! <Hooks 和 SimProcedures>`！。
 
-Note that this page should be treated as a narrative document, not a reference
-document, so you should read it at least once start to end.
+请注意，本章应被视为叙述性文档，而不是参考文档，因此你应该至少从头到尾阅读一次。
 
 Setup
 -----

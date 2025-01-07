@@ -1,21 +1,19 @@
-Cheatsheet
+速查表
 ==========
 
-The following cheatsheet aims to give an overview of various things you can do
-with angr and act as a quick reference to check the syntax for something without
-having to dig through the deeper docs.
+以下速查表旨在概述你可以使用 angr 做的各种事情，并作为快速参考，以便在不必深入查阅详细文档的情况下检查某些语法。
 
-General getting started
+通用入门
 -----------------------
 
-Some useful imports
+一些有用的 import
 
 .. code-block:: python
 
    import angr #the main framework
    import claripy #the solver engine
 
-Loading the binary
+加载二进制文件
 
 .. code-block:: python
 
@@ -24,7 +22,7 @@ Loading the binary
 States
 ------
 
-Create a SimState object
+创建 SimState 对象
 
 .. code-block:: python
 
@@ -33,16 +31,16 @@ Create a SimState object
 Simulation Managers
 -------------------
 
-Generate a simulation manager object
+创建 simulation manager 对象
 
 .. code-block:: python
 
    simgr = proj.factory.simulation_manager(state)
 
-Exploring and analysing states
+探索和分析 States
 ------------------------------
 
-Choosing a different Exploring strategy
+选择不同的 explore 策略
 
 .. code-block:: python
 
@@ -61,27 +59,26 @@ Symbolically execute until we find a state satisfying our ``find=`` and ``avoid=
    found = simgr.found[0] # A state that reached the find condition from explore
    found.solver.eval(sym_arg, cast_to=bytes) # Return a concrete string value for the sym arg to reach this state
 
-Symbolically execute until lambda expression is ``True``
+符号执行直到 lambda 表达式为 ``True``
 
 .. code-block:: python
 
    simgr.step(until=lambda sm: sm.active[0].addr >= first_jmp)
 
-This is especially useful with the ability to access the current STDOUT or
-STDERR (1 here is the File Descriptor for STDOUT)
+以下代码在能够访问当前的 STDOUT 或 STDERR 时特别有用（这里的 1 是 STDOUT 的文件描述符）
 
 .. code-block:: python
 
    simgr.explore(find=lambda s: "correct" in s.posix.dumps(1))
 
-Memory Management on big searches (Auto Drop Stashes):
+大规模搜索中的内存管理（自动丢弃 Stashes）：
 
 .. code-block:: python
 
 
    simgr.explore(find=find_addr, avoid=avoid_addr, step_func=lambda lsm: lsm.drop(stash='avoid'))
 
-Manually Exploring
+手动 explore
 ^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
@@ -94,39 +91,39 @@ Manually Exploring
        lsm.stash(filter_func=lambda state: state.addr == 0x400c10, from_stash='active', to_stash='found')
        return lsm
 
-Enable Logging output from Simulation Manager:
+启用 Simulation Manager 的日志输出：
 
 .. code-block:: python
 
    import logging
    logging.getLogger('angr.sim_manager').setLevel(logging.DEBUG)
 
-Stashes
+存储的内容（Stashes）
 ^^^^^^^
 
-Move Stash:
+移动 Stash:
 
 .. code-block:: python
 
    simgr.stash(from_stash="found", to_stash="active")
 
-Drop Stashes:
+丢弃 Stashes:
 
 .. code-block:: python
 
    simgr.drop(stash="avoid")
 
-Constraint Solver (claripy)
+约束求解器 (claripy)
 ---------------------------
 
-Create symbolic object
+创建符号化对象
 
 .. code-block:: python
 
    sym_arg_size = 15 #Length in Bytes because we will multiply with 8 later
    sym_arg = claripy.BVS('sym_arg', 8*sym_arg_size)
 
-Restrict sym_arg to typical char range
+将符号参数限制在某种 char 范围内
 
 .. code-block:: python
 
@@ -134,7 +131,7 @@ Restrict sym_arg to typical char range
        initial_state.add_constraints(byte >= '\x20') # ' '
        initial_state.add_constraints(byte <= '\x7e') # '~'
 
-Create a state with a symbolic argument
+创建带有符号参数的状态
 
 .. code-block:: python
 
@@ -142,7 +139,7 @@ Create a state with a symbolic argument
    argv.append(sym_arg)
    state = proj.factory.entry_state(args=argv)
 
-Use argument for solving:
+使用参数进行求解:
 
 .. code-block:: python
 
@@ -151,10 +148,10 @@ Use argument for solving:
    argv.append(sym_arg)
    initial_state = proj.factory.full_init_state(args=argv, add_options=angr.options.unicorn, remove_options={angr.options.LAZY_SOLVES})
 
-FFI and Hooking
+FFI 和 Hooking
 ---------------
 
-Calling a function from ipython
+从 ipython 调用函数
 
 .. code-block:: python
 
@@ -163,9 +160,7 @@ Calling a function from ipython
    x=claripy.BVS('x', 64)
    f(x) #TODO: Find out how to make that result readable
 
-If what you are interested in is not directly returned because for example the
-function returns the pointer to a buffer you can access the state after the
-function returns with
+如果你感兴趣的内容没有直接返回，例如函数返回的是指向缓冲区的指针，你可以用以下代码访问函数返回后的状态
 
 .. code-block:: python
 
@@ -174,15 +169,14 @@ function returns with
 
 Hooking
 
-There are already predefined hooks for libc functions (useful for statically
-compiled libraries)
+已经为 libc 函数预定义了 Hook 函数（对于静态编译的库很有用）
 
 .. code-block:: python
 
    proj = angr.Project('/path/to/binary', use_sim_procedures=True)
    proj.hook(addr, angr.SIM_PROCEDURES['libc']['atoi']())
 
-Hooking with Simprocedure:
+使用 Simprocedure 进行 Hook：
 
 .. code-block:: python
 
@@ -192,11 +186,10 @@ Hooking with Simprocedure:
 
    proj.hook(0x4008cd, fixpid())
 
-Other useful tricks
+其他有用的技巧
 -------------------
 
-Drop into an ipython if a ctr+c is received (useful for debugging scripts that
-are running forever)
+如果收到 ctr+c，则进入 ipython（对于调试运行时间过长的脚本非常有用）
 
 .. code-block:: python
 
@@ -211,14 +204,14 @@ are running forever)
 
    signal.signal(signal.SIGINT, sigint_handler)
 
-Get the calltrace of a state to find out where we got stuck
+获取状态的 calltrace 以找出我们卡住的位置
 
 .. code-block:: python
 
    state = simgr.active[0]
    print state.callstack
 
-Get a basic block
+获取 basic block
 
 .. code-block:: python
 
@@ -226,17 +219,17 @@ Get a basic block
    block.capstone.pp() # Capstone object has pretty print and other data about the disassembly
    block.vex.pp()      # Print vex representation
 
-State manipulation
+State 操作
 ------------------
 
-Write to state:
+向 state 写内存:
 
 .. code-block:: python
 
    aaaa = claripy.BVV(0x41414141, 32) # 32 = Bits
    state.memory.store(0x6021f2, aaaa)
 
-Read Pointer to Pointer from Frame:
+读取帧内容赋值给另一个指针:
 
 .. code-block:: python
 
@@ -245,7 +238,7 @@ Read Pointer to Pointer from Frame:
    poi1 += 0x8
    ptr1 = new_state.mem[poi1].long.concrete
 
-Read from State:
+从 State 读内存:
 
 .. code-block:: python
 
@@ -253,16 +246,16 @@ Read from State:
    for i in range(38):
        key.append(extractkey.mem[0x602140 + i*4].int.concrete)
 
-Alternatively, the below expression is equivalent
+或者，下面的表达式是等价的
 
 .. code-block:: python
 
    key = extractkey.mem[0x602140].int.array(38).concrete
 
-Debugging angr
+调试 angr
 --------------
 
-Set Breakpoint at every Memory read/write:
+在每次内存读/写时设置断点：
 
 .. code-block:: python
 
@@ -270,7 +263,7 @@ Set Breakpoint at every Memory read/write:
    def debug_funcRead(state):
        print 'Read', state.inspect.mem_read_expr, 'from', state.inspect.mem_read_address
 
-Set Breakpoint at specific Memory location:
+在特定内存位置设置断点：
 
 .. code-block:: python
 

@@ -1,45 +1,37 @@
-Analyses
+分析器（Analyses）
 ========
 
-angr's goal is to make it easy to carry out useful analyses on binary programs.
-To this end, angr allows you to package analysis code in a common format that
-can be easily applied to any project. We will cover writing your own analyses
-:ref:`Writing Analyses`, but the idea is that all the analyses appear under
-``project.analyses`` (for example, ``project.analyses.CFGFast()``) and can be
-called as functions, returning analysis result instances.
+angr 的目标是使在二进制程序上进行有用的分析变得容易。
+为此，angr 允许您以通用格式打包分析代码，可以轻松应用于任何项目。我们将介绍如何编写自己的分析
+:ref:`学会写分析器` ，但是想法是所有分析都出现在
+``project.analyses`` 下（例如， ``project.analyses.CFGFast()`` ），可以
+作为函数调用，返回分析结果实例。
 
-Built-in Analyses
+内置分析
 -----------------
 
 .. list-table::
-   :header-rows: 1
+  :header-rows: 1
 
-   * - Name
-     - Description
-   * - CFGFast
-     - Constructs a fast *Control Flow Graph* of the program
-   * - CFGEmulated
-     - Constructs an accurate *Control Flow Graph* of the program
-   * - VFG
-     - Performs VSA on every function of the program, creating a *Value Flow
-       Graph* and detecting stack variables
-   * - DDG
-     - Calculates a *Data Dependency Graph*, allowing one to determine what
-       statements a given value depends on
-   * - BackwardSlice
-     - Computes a *Backward Slice* of a program with respect to a certain target
-   * - Identifier
-     - Identifies common library functions in CGC binaries
-   * - More!
-     - angr has quite a few analyses, most of which work! If you'd like to know
-       how to use one, please submit an issue requesting documentation.
+  * - 名称
+    - 描述
+  * - CFGFast
+    - 构建程序的快速 *控制流图*
+  * - CFGEmulated
+    - 构建程序的准确 *控制流图*
+  * - VFG
+    - 对程序的每个函数执行 VSA，创建 *值流图* 并检测堆栈变量
+  * - DDG
+    - 计算 *数据依赖图* ，允许确定给定值依赖于哪些语句
+  * - BackwardSlice
+    - 根据特定目标计算程序的 *反向切片*
+  * - Identifier
+    - 在 CGC 二进制文件中识别常见的库函数
+  * - 更多！
+    - angr 有很多分析，其中大部分都有效！如果您想知道如何使用其中一个，请提交一个问题请求文档。
 
-
-Resilience
+弹性
 ----------
 
-Analyses can be written to be resilient, and catch and log basically any error.
-These errors, depending on how they're caught, are logged to the ``errors`` or
-``named_errors`` attribute of the analysis. However, you might want to run an
-analysis in "fail fast" mode, so that errors are not handled. To do this, the
-argument ``fail_fast=True`` can be passed into the analysis constructor.
+分析可以编写成具有弹性，可以捕获和记录任何错误。
+这些错误，根据如何捕获，被记录到分析的 ``errors`` 或 ``named_errors`` 属性中。但是，您可能希望以“快速失败”模式运行分析，以便不处理错误。为此，可以将参数 ``fail_fast=True`` 传递给分析构造函数。

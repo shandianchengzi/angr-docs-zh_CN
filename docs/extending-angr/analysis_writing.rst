@@ -1,9 +1,7 @@
-Writing Analyses
+学会写分析器
 ================
 
-An analysis can be created by subclassing the ``angr.Analysis`` class. In this
-section, we'll create a mock analysis to show off the various features. Let's
-start with something simple:
+可以通过继承 ``angr.Analysis`` 类来创建分析。在本节中，我们将创建一个模拟分析来展示各种功能。让我们从一些简单的东西开始：
 
 .. code-block:: python
 

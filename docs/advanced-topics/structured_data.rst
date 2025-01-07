@@ -1,18 +1,13 @@
-Working with Data and Conventions
+使用内置的数据类型和调用约定
 =================================
 
 Frequently, you'll want to access structured data from the program you're
 analyzing. angr has several features to make this less of a headache.
 
-Working with types
+使用数据类型
 ------------------
 
-angr has a system for representing types. These SimTypes are found in
-``angr.types`` - an instance of any of these classes represents a type. Many of
-the types are incomplete unless they are supplemented with a SimState - their
-size depends on the architecture you're running under. You may do this with
-``ty.with_arch(arch)``, which returns a copy of itself, with the architecture
-specified.
+angr 有一个用于表示类型的系统。这些 SimTypes 可以在 ``angr.types`` 中找到 - 这些类的任何实例都表示一种类型。许多类型是不完整的，除非它们被补充了一个 SimState - 它们的大小取决于你运行的架构。你可以使用 ``ty.with_arch(arch)`` 来实现，这将返回一个带有指定架构的自身副本。
 
 angr also has a light wrapper around ``pycparser``, which is a C parser.
 This helps with getting instances of type objects:
@@ -156,28 +151,14 @@ can access it here as a type:
      .y = <BV32 0x89485ed1>
    } at 0x400580>
 
-Working with Calling Conventions
+使用调用约定
 --------------------------------
 
-A calling convention is the specific means by which code passes arguments and
-return values through function calls. angr's abstraction of calling conventions
-is called SimCC. You can construct new SimCC instances through the angr object
-factory, with ``p.factory.cc(...)``. This will give a calling convention which
-is guessed based your guest architecture and OS. If angr guesses wrong, you can
-explicitly pick one of the calling conventions in the
-``angr.calling_conventions`` module.
+调用约定是代码通过函数调用传递参数和返回值的具体方式。angr 的调用约定抽象称为 SimCC。你可以通过 angr 对象工厂构造新的 SimCC 实例，使用 ``p.factory.cc(...)``。这将根据你的目标架构和操作系统猜测一个调用约定。如果 angr 猜错了，你可以在 ``angr.calling_conventions`` 模块中显式选择一个调用约定。
 
-If you have a very wacky calling convention, you can use
-``angr.calling_conventions.SimCCUsercall``. This will ask you to specify
-locations for the arguments and the return value. To do this, use instances of
-the ``SimRegArg`` or ``SimStackArg`` classes. You can find them in the factory -
-``p.factory.cc.Sim*Arg``.
+如果你有一个非常奇怪的调用约定，你可以使用 ``angr.calling_conventions.SimCCUsercall``。这将要求你指定参数和返回值的位置。为此，请使用 ``SimRegArg`` 或 ``SimStackArg`` 类的实例。你可以在工厂中找到它们 - ``p.factory.cc.Sim*Arg``。
 
-Once you have a SimCC object, you can use it along with a SimState object and a
-function prototype (a SimTypeFunction) to extract or store function arguments
-more cleanly. Take a look at the :py:class:`angr.calling_conventions.SimCC>` for
-details. Alternately, you can pass it to an interface that can use it to modify
-its own behavior, like ``p.factory.call_state``, or...
+一旦你有了一个 SimCC 对象，你可以将它与 SimState 对象和函数原型（一个 SimTypeFunction）一起使用，以更清晰地提取或存储函数参数。查看 :py:class:`angr.calling_conventions.SimCC>` 了解详细信息。或者，你可以将它传递给可以使用它来修改其自身行为的接口，例如 ``p.factory.call_state``，或...
 
 Callables
 ---------

@@ -1,9 +1,7 @@
-Optimization considerations
+如何提高速度
 ===========================
 
-The performance of angr as an analysis tool or emulator is greatly handicapped
-by the fact that lots of it is written in Python. Regardless, there are a lot of
-optimizations and tweaks you can use to make angr faster and lighter.
+由于 angr 的很多部分是用 Python 编写的，作为分析工具或仿真器，它的性能受到了很大的限制。尽管如此，你仍然可以使用许多优化和调整来使 angr 更快、更轻量。
 
 General speed tips
 ------------------

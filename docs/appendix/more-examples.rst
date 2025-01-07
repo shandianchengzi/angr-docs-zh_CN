@@ -1,8 +1,7 @@
-CTF Challenge Examples
+CTF 题示例
 ======================
 
-angr is very often used in CTFs. These are example scripts resulting from that
-use, mostly from Shellphish but also from many others.
+angr 经常用于 CTF（夺旗赛）。以下是使用 angr 的一些示例脚本，主要来自 Shellphish，但也有来自其他许多团队的。
 
 ReverseMe example: HackCon 2016 - angry-reverser
 ------------------------------------------------
