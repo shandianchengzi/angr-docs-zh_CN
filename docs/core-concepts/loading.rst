@@ -1,4 +1,4 @@
-Loading a Binary
+加载二进制文件
 ================
 
 Previously, you saw just the barest taste of angr's loading facilities - you

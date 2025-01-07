@@ -1,9 +1,7 @@
-Migrating to angr 7
+迁移到 angr 7
 ===================
 
-The release of angr 7 introduces several departures from long-standing angr-isms.
-While the community has created a compatibility layer to give external code written for angr 6 a good chance of working on angr 7, the best thing to do is to port it to the new version.
-This document serves as a guide for this.
+angr 7 的发布引入了几个长期存在的 angr 特性的变化。虽然社区创建了一个兼容层，使为 angr 6 编写的外部代码有很大机会在 angr 7 上运行，但最好的做法是将其移植到新版本。本文档作为此过程的指南。
 
 SimuVEX is gone
 ---------------

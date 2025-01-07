@@ -1,24 +1,20 @@
-Installing angr
-===============
+安装 angr
+========
 
-angr is a library for Python 3.10+, and must be installed into a Python
-environment before it can be used.
+angr 是一个适用于 Python 3.10+ 的库，必须安装到 Python 环境中才能使用。
 
-Installing from PyPI
---------------------
+从 PyPI 安装
+----------
 
-angr is published on `PyPI <https://pypi.org/>`_, and using this is the easiest
-and recommended way to install angr. It can be installed angr with pip:
+angr 发布在 `PyPI <https://pypi.org/>`_ 上，从 PyPI 安装是安装 angr 最简单和最推荐的方式。即，使用 pip 安装 angr：
 
 .. code-block:: bash
 
    pip install angr
 
 .. tip::
-   It is recommended to use an isolated python environment rather than installing
-   angr globally. Doing so reduces dependency conflicts and aids in
-   reproducibility while debugging. Some popular tools that accomplish this
-   include:
+
+   建议安装时使用隔离的 Python 环境，不要全局安装 angr。因为隔离的 Python 环境可以减少依赖冲突，在调试时也有助于重现问题。一些流行的工具包括：
 
    * `venv <https://docs.python.org/3/library/venv.html>`_
    * `pipenv <https://pipenv.pypa.io/en/latest/>`_
@@ -27,72 +23,58 @@ and recommended way to install angr. It can be installed angr with pip:
    * `conda <https://docs.conda.io/en/latest/>`_
 
 .. note::
-   The PyPI distribution includes binary packages for most popular system
-   configurations. If you are using a system that is not supported by the
-   binary packages, you will need to build the C dependencies from source. See
-   the `Installing from Source`_ section for more information.
 
-Installing from Source
-----------------------
+   PyPI 分发版包含了大多数流行系统配置的二进制包。如果您使用的系统不受二进制包支持，则需要从源代码构建 C 依赖项（译者注：意思是有一些组件是编译成二进制形式进行分发的，需要对不同的系统做适配，angr 已经对大多数流行的操作系统（如Ubuntu、Windows）做适配了，但也没有覆盖所有的操作系统，如果你发现 PyPI 装的用不了，就必须源码安装）。有关更多信息，请参见 `从源代码安装`_ 部分。
 
-angr is a collection of Python packages, each of which is published on GitHub.
-The easiest way to install angr from source is to use `angr-dev
-<https://github.com/angr/angr-dev>`_.
+从源代码安装
+------------
 
-To set up a development environment manually, first ensure that build
-dependencies are installed. These consist of python development headers,
-``make``, and a C compiler. On Ubuntu, these can be installed with:
+angr 是多个 Python 包的集合，每个包都发布在 GitHub 上。从源代码安装 angr 最简单的方法是使用 `angr-dev <https://github.com/angr/angr-dev>`_。
+
+要手动设置开发环境，首先确保安装了构建依赖项。这些依赖项包括 Python 开发时用到的头文件、 ``make`` 和 C 编译器。在 Ubuntu 上，可以使用以下命令安装：
 
 .. code-block:: bash
 
    sudo apt-get install python3-dev build-essential
 
-Then, checkout and install the following packages, in order:
+然后，按顺序检出并安装以下包：
 
 * `archinfo <https://github.com/angr/archinfo>`_
-* `pyvex <https://github.com/angr/pyvex>`_ (clone with ``--recursive``)
+* `pyvex <https://github.com/angr/pyvex>`_ (使用 ``--recursive`` 克隆)
 * `cle <https://github.com/angr/cle>`_
 * `claripy <https://github.com/angr/claripy>`_
 * `ailment <https://github.com/angr/ailment>`_
-* `angr <https://github.com/angr/angr>`_ (``pip install`` with
-  ``--no-build-isolation``)
+* `angr <https://github.com/angr/angr>`_ (使用 ``pip install`` 和 ``--no-build-isolation`` )
 
-Installing with Docker
-----------------------
+使用 Docker 安装
+--------------
 
-The angr team maintains a container image on Docker Hub that includes angr and
-its dependencies. This image can be pulled with:
+angr 团队在 Docker Hub 上维护了一个包含 angr 及其依赖项的容器镜像。可以使用以下命令拉取该镜像：
 
 .. code-block:: bash
 
    docker pull angr/angr
 
-The image can be run with:
+可以使用以下命令运行该镜像：
 
 .. code-block:: bash
 
    docker run -it angr/angr
 
-This will start a shell in the container, with angr installed and ready to use.
+这将启动容器中的一个 shell。在这个 shell 中，angr 已安装并可以使用。
 
+故障排除
+--------
 
-Troubleshooting
----------------
+angr has no attribute Project，或类似问题
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-angr has no attribute Project, or similar
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+如果可以导入 angr 但缺少 ``Project`` 类，可能是以下两个问题之一：
 
-If angr can be imported but the ``Project`` class is missing, it is likely one
-of two problems:
-
-#. There is a script named ``angr.py`` in the working directory. Rename it to
-   something else.
-#. There is a folder called ``angr`` in your working directory, possibly the
-   cloned repository. Change the working directory to somewhere else.
+#. 工作目录中有一个名为 ``angr.py`` 的脚本。将其重命名为其他名称。
+#. 工作目录中有一个名为 ``angr`` 的文件夹，可能是克隆的仓库。将工作目录更改为其他位置。
 
 AttributeError: 'module' object has no attribute 'KS_ARCH_X86'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``keystone`` package is installed, which conflicts with the
-``keystone-engine`` package, an optional dependency of angr. Uninstall
-``keystone`` and install ``keystone-engine``.
+这个问题可能是因为安装了 ``keystone`` 包，而这与 angr 的可选依赖项 ``keystone-engine`` 包冲突。卸载 ``keystone`` 并安装 ``keystone-engine`` 即可。

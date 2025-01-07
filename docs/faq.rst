@@ -1,28 +1,27 @@
-Frequently Asked Questions
+常见问题
 ==========================
 
 This is a collection of commonly-asked "how do I do X?" questions and other
 general questions about angr, for those too lazy to read this whole document.
 
 If your question is of the form "how do I fix X issue after installing", see
-also the Troubleshooting section of the :ref:`install instructions <Installing
-angr>`_.
+also the Troubleshooting section of the :ref:`install instructions <安装
+angr>`_ .
 
-Why is it named angr?
+为什么叫 angr？
 ---------------------
 
-The core of angr's analysis is on VEX IR, and when something is vexing, it makes
-you angry.
+angr 分析的核心是 VEX IR，当某件事是 vexing 的，它会使你 angry。
 
-How should "angr" be stylized?
+“angr” 应该如何书写？
 ------------------------------
 
-All lowercase, even at the beginning of sentences. It's an anti-proper noun.
+全小写，即使在句子的开头也是如此。这是一个反专有名词。
 
-Why isn't symbolic execution doing the thing I want?
+为什么符号执行没有按我想要的方式运行？
 ----------------------------------------------------
 
-The universal debugging technique for symbolic execution is as follows:
+符号执行的通用调试技术如下：
 
 
 * Check your simulation manager for errored states. ``print(simgr)`` is a good
@@ -44,50 +43,36 @@ The universal debugging technique for symbolic execution is as follows:
   gone past a branch, you can check the most recent branch condition with
   ``state.history.events[-1]``.
 
-How can I get diagnostic information about what angr is doing?
+如何获取有关 angr 正在做什么的诊断信息？
 --------------------------------------------------------------
 
-angr uses the standard ``logging`` module for logging, with every package and
-submodule creating a new logger.
+angr 使用标准的 ``logging`` 模块进行日志记录，每个包和子模块都会创建一个新的记录器。
 
-The simplest way to get debug output is the following:
+获取调试输出的最简单方法如下：
 
 .. code-block:: python
 
    import logging
    logging.getLogger('angr').setLevel('DEBUG')
 
-You may want to use ``INFO`` or whatever else instead. By default, angr will
-enable logging at the ``WARNING`` level.
+你可能想使用 ``INFO`` 或其他级别。默认情况下，angr 会在 ``WARNING`` 级别启用日志记录。
 
-Each angr module has its own logger string, usually all the Python modules above
-it in the hierarchy, plus itself, joined with dots. For example,
-``angr.analyses.cfg``. Because of the way the Python logging module works, you
-can set the verbosity for all submodules in a module by setting a verbosity
-level for the parent module. For example,
-``logging.getLogger('angr.analyses').setLevel('INFO')`` will make the CFG, as
-well as all other analyses, log at the INFO level.
+每个 angr 模块都有它自己的 logger，只要使用模块路径就可以找到它，即层次结构中所有 Python 模块加上自身，用点连接。例如， ``angr.analyses.cfg`` 。根据 Python 日志记录模块的工作方式，你可以通过为父模块设置一个详细级别来设置所有子模块的详细级别。例如， ``logging.getLogger('angr.analyses').setLevel('INFO')`` 将使 CFG 以及所有其他分析器在 INFO 级别记录日志。
 
-Why is angr so slow?
+为什么 angr 这么慢？
 --------------------
 
-It's complicated! :ref:`Optimization considerations`
+这很复杂！ :ref:`如何提高速度`
 
-How do I find bugs using angr?
-------------------------------
+如何使用 angr 找到漏洞？
+------------------------
 
-It's complicated! The easiest way to do this is to define a "bug condition", for
-example, "the instruction pointer has become a symbolic variable", and run
-symbolic exploration until you find a state matching that condition, then dump
-the input as a testcase. However, you will quickly run into the state explosion
-problem. How you address this is up to you. Your solution may be as simple as
-adding an ``avoid`` condition or as complicated as implementing CMU's MAYHEM
-system as an Exploration Technique.
+这很复杂！最简单的方法是定义一个“漏洞条件”，例如，“指令指针变成了一个符号变量”，然后运行符号探索，直到找到符合该条件的状态，然后将输入转储为测试用例。然而，你很快就会遇到路径爆炸问题。如何解决这个问题取决于你。你的解决方案可能像添加一个 ``avoid`` 条件一样简单，也可能像实现 CMU 的 MAYHEM 系统作为探索技术一样复杂。
 
-Why did you choose VEX instead of another IR (such as LLVM, REIL, BAP, etc)?
-----------------------------------------------------------------------------
+为什么选择 VEX 而不是其他 IR（如 LLVM、REIL、BAP 等）？
+------------------------------------------------------------
 
-We had two design goals in angr that influenced this choice:
+我们在 angr 中有两个设计目标影响了这个选择：
 
 
 #. angr needed to be able to analyze binaries from multiple architectures. This
@@ -135,30 +120,21 @@ package, that are VEX-specific:
 To support multiple IRs, we'll either want to abstract these things or translate
 their labels to VEX analogues.
 
-Why are some ARM addresses off-by-one?
+为什么一些 ARM 地址会偏移一个字节？
 --------------------------------------
 
-In order to encode THUMB-ness of an ARM code address, we set the lowest bit to
-one. This convention comes from LibVEX, and is not entirely our choice! If you
-see an odd ARM address, that just means the code at ``address - 1`` is in THUMB
-mode.
+为了编码 ARM 代码地址的 THUMB 模式，我们将最低位设置为 1。这个约定来自 LibVEX，不完全由我们决定！如果你看到一个奇数的 ARM 地址，那就意味着 ``address - 1`` 处的代码处于 THUMB 模式。
 
-How do I serialize angr objects?
+如何序列化 angr 对象？
 --------------------------------
 
-`Pickle <https://docs.python.org/2/library/pickle.html>`_ will work. However,
-Python will default to using an extremely old pickle protocol that does not
-support more complex Python data structures, so you must specify a `more
-advanced data stream format
-<https://docs.python.org/2/library/pickle.html#data-stream-format>`_. The
-easiest way to do this is ``pickle.dumps(obj, -1)``.
+`Pickle <https://docs.python.org/2/library/pickle.html>`_ 可以使用。然而，Python 默认使用一个非常旧的 pickle 协议，它不支持更复杂的 Python 数据结构，所以你必须指定一个 `更高级的数据流格式 <https://docs.python.org/2/library/pickle.html#data-stream-format>`_ 。最简单的方法是使用 ``pickle.dumps(obj, -1)``。
 
-What does ``UnsupportedIROpError("floating point support disabled")`` mean?
+``UnsupportedIROpError("floating point support disabled")`` 是什么意思？
 -------------------------------------------------------------------------------
 
-This might crop up if you're using a CGC analysis such as driller or rex.
-Floating point support in angr has been disabled in the CGC analyses for a
-tight-knit nebula of reasons:
+如果你正在使用 CGC 分析（例如 driller 或 rex），可能会出现这种情况。
+在 CGC 分析中，angr 的浮点支持已被禁用，原因如下：
 
 
 * Libvex's representation of floating point numbers is imprecise - it converts
@@ -191,27 +167,17 @@ because you don't have unicorn installed or configured correctly. If you're
 seeing this issue just in a log somewhere, it's just the oppologist kicking in
 and you have nothing to worry about.
 
-Why is angr's CFG different from IDA's?
+为什么 angr 的 CFG 与 IDA 的不同？
 ---------------------------------------
 
-Two main reasons:
+主要有两个原因：
 
+* IDA 不会在函数调用处拆分基本块。angr 会，因为它们是一种控制流，基本块在控制流指令处结束。通常 IDA 形成的那种超长的控制流对执行自动分析是没有必要的。
+* 如果另一个块跳到它的中间，IDA 会拆分基本块。这称为基本块规范化，angr 默认不执行此操作，因为对于大多数静态分析来说这是不必要的。你可以通过在 CFG 分析中传递 ``normalize=True`` 来启用它。
 
-* IDA does not split basic blocks at function calls. angr will, because they are
-  a form of control flow and basic blocks end at control flow instructions. You
-  generally do not need the supergraph for performing automated analyses.
-* IDA will split basic blocks if another block jumps into the middle of it. This
-  is called basic block normalization, and angr does not do it by default since
-  it is unnecessary for most static analyses. You may enable it by passing
-  ``normalize=True`` to the CFG analysis.
-
-Why do I get incorrect register values when reading from a state during a SimInspect breakpoint?
+为什么在 SimInspect 断点期间从状态读取时会得到不正确的寄存器值？
 ------------------------------------------------------------------------------------------------
 
-libVEX will eliminate duplicate register writes within a single basic block when
-optimizations are enabled. Turn off IR optimization to make everything look
-right at all times.
+当启用优化时，libVEX 会消除单个基本块内的重复寄存器写入。关闭 IR 优化可以使所有内容在任何时候都看起来正确。
 
-In the case of the instruction pointer, libVEX will frequently omit mid-block
-writes even when optimizations are disabled. In this case, you should use
-``state.scratch.ins_addr`` to get the current instruction pointer.
+在指令指针的情况下，即使禁用了优化，libVEX 也会经常省略块中间的写入。在这种情况下，你应该使用 ``state.scratch.ins_addr`` 来获取当前的指令指针。

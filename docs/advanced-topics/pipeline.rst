@@ -1,4 +1,4 @@
-Understanding the Execution Pipeline
+理解执行流程
 ====================================
 
 If you've made it this far you know that at its core, angr is a highly flexible

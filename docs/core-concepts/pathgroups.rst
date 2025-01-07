@@ -1,4 +1,4 @@
-Simulation Managers
+模拟管理器（Simulation Managers）
 ===================
 
 The most important control interface in angr is the SimulationManager, which
@@ -213,7 +213,7 @@ Now, we can get the flag out of that state!
 
 Pretty simple, isn't it?
 
-Other examples can be found by browsing the :ref:`examples <angr examples>`.
+Other examples can be found by browsing the :ref:`examples <angr 示例>`.
 
 Exploration Techniques
 ----------------------

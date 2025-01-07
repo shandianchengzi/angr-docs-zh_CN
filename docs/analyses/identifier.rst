@@ -1,4 +1,4 @@
-Identifier
+标识符（Identifier）
 ==========
 
 The identifier uses test cases to identify common library functions in CGC

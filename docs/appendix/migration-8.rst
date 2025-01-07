@@ -1,8 +1,8 @@
-Migrating to angr 8
+迁移到 angr 8
 ===================
 
-angr has moved from Python 2 to Python 3!
-We took this opportunity of a major version bump to make a few breaking API changes that improve quality-of-life.
+angr 已从 Python 2 迁移到 Python 3！
+我们借此机会在主要版本更新时进行了一些破坏性的 API 更改，以提高 quality-of-life。
 
 What do I need to know for migrating my scripts to Python 3?
 ------------------------------------------------------------

@@ -1,20 +1,15 @@
-Reporting Bugs
-==============
+报告 Bugs
+========
 
-If you've found something that angr isn't able to solve and appears to be a bug,
-please let us know!
+如果你发现了 angr 无法解决的问题，并且看起来像是一个 bug ，请告诉我们！
 
+#. 从 angr/binaries 和 angr/angr 创建一个分支
+#. 给我们一个包含相关二进制文件的 angr/binaries 的拉取请求
+#. 给我们一个包含触发这些二进制文件的测试用例的 angr/angr 的拉取请求，这些测试用例应放在 ``angr/tests/broken_x.py`` 、 ``angr/tests/broken_y.py`` 等文件中
 
-#. Create a fork off of angr/binaries and angr/angr
-#. Give us a pull request with angr/binaries, with the binaries in question
-#. Give us a pull request for angr/angr, with testcases that trigger the
-   binaries in ``angr/tests/broken_x.py``, ``angr/tests/broken_y.py``, etc
+请尽量遵循我们已有的测试用例格式（代码应在一个 test_blah 函数中），这样我们可以很容易地合并并运行这些脚本。
 
-Please try to follow the testcase format that we have (so the code is in a
-test_blah function), that way we can very easily merge that and make the scripts
-run.
-
-An example is:
+一个例子是：
 
 .. code-block:: python
 
@@ -26,108 +21,59 @@ An example is:
    if __name__ == '__main__':
        test_some_broken_feature()
 
-This will *greatly* help us recreate your bug and fix it faster.
+这将 *极大地* 帮助我们重现你的 bug 并更快地修复它。
 
-The ideal situation is that, when the bug is fixed, your testcases passes (i.e.,
-the assert at the end does not raise an AssertionError).
+理想情况下，当 bug 被修复时，你的测试用例通过（即，最后的断言不会引发 AssertionError）。
 
-Then, we can just fix the bug and rename ``broken_x.py`` to ``test_x.py`` and
-the testcase will run in our internal CI at every push, ensuring that we do not
-break this feature again.
+然后，我们可以修复 bug 并将 ``broken_x.py`` 重命名为 ``test_x.py`` ，测试用例将在每次推送时在我们的内部 CI 中运行，确保我们不会再次破坏这个功能。
 
-Developing angr
-===============
+开发 angr
+========
 
-These are some guidelines so that we can keep the codebase in good shape!
+以下是一些指南，以便我们保持代码库的良好状态！
 
 pre-commit
 ----------
 
-Many angr repos contain pre-commit hooks provided by `pre-commit
-<https://pre-commit.com/>`_. Installing this is as easy as ``pip install
-pre-commit``. After ``git`` cloning an angr repository, if the repo contains a
-``.pre-commit-config.yaml``, run ``pre-commit install``. Future ``git``
-commits will now invoke these hooks automatically.
+许多 angr 仓库包含由 `pre-commit <https://pre-commit.com/>`_ 提供的 pre-commit hooks（译者注：Pre-commit hooks 是 Git 提交前自动执行的脚本，用于检查代码质量、格式规范或依赖项，以确保提交内容符合项目要求）。安装它就像 ``pip install pre-commit`` 一样简单。在 ``git`` 克隆一个 angr 仓库后，如果仓库包含 ``.pre-commit-config.yaml`` ，运行 ``pre-commit install``。未来的 ``git`` 提交现在将自动调用这些 hooks。
 
-Coding style
-------------
+编码风格
+--------
 
-We format our code with `black <https://github.com/psf/black>`_ and otherwise
-try to get as close as the `PEP8 code convention
-<http://legacy.python.org/dev/peps/pep-0008/>`_ as is reasonable without being
-dumb. If you use Vim, the `python-mode <https://github.com/klen/python-mode>`_
-plugin does all you need. You can also `manually configure
-<https://wiki.python.org/moin/Vim>`_ vim to adopt this behavior.
+我们使用 `black <https://github.com/psf/black>`_ 格式化我们的代码，并尽量接近 `PEP8 代码规范 <http://legacy.python.org/dev/peps/pep-0008/>`_ ，在合理的范围内不做愚蠢的事情。如果你使用 Vim， `python-mode <https://github.com/klen/python-mode>`_ 插件可以满足你的所有需求。你也可以 `手动配置 <https://wiki.python.org/moin/Vim>`_ vim 以采用这种行为。
 
-Most importantly, please consider the following when writing code as part of angr:
+最重要的是，请在编写 angr 代码时考虑以下几点：
 
+* 尽量使用属性访问（参见 ``@property`` 装饰器）来替代 getter 和 setter 方法。这不是 Java，属性访问在 iPython 中支持 Tab 自动补全。话虽如此，也要合理使用：属性访问应当是快速的。一个经验法则是，如果某个操作可能需要约束求解，那么它就不应该作为属性。
 
-* Try to use attribute access (see the ``@property`` decorator) instead of
-  getters and setters wherever you can. This isn't Java, and attributes enable
-  tab completion in iPython. That being said, be reasonable: attributes should
-  be fast. A rule of thumb is that if something could require a constraint
-  solve, it should not be an attribute.
+* 请使用来自 `angr-dev 仓库的 pylintrc 文件 <https://github.com/angr/angr-dev/blob/master/pylintrc>`_ 。该配置相对宽松，但如果 pylint 在这些设置下报错，我们的 CI 服务器将会使你的贡献 build 失败。
 
-* Use `our pylintrc from the angr-dev repo
-  <https://github.com/angr/angr-dev/blob/master/pylintrc>`_. It's fairly
-  permissive, but our CI server will fail your builds if pylint complains under
-  those settings.
+* 在【任何情况】下都【不要】 ``raise Exception`` 或 ``assert False``。 **请使用正确的异常类型** 。如果没有合适的异常类型，请继承当前模块的核心异常类（例如， angr 中的 ``AngrError`` ， SimuVEX 中的 ``SimError`` 等）并抛出它。我们会在适当的位置捕获并正确处理指定类型的错误，但 ``AssertionError`` 和 ``Exception`` 在任何地方都不会被处理，它们会强制终止分析过程。
 
-* DO NOT, under ANY circumstances, ``raise Exception`` or ``assert False``.
-  **Use the right exception type**. If there isn't a correct exception type,
-  subclass the core exception of the module that you're working in (i.e.,
-  ``AngrError`` in angr, ``SimError`` in SimuVEX, etc) and raise that. We catch,
-  and properly handle, the right types of errors in the right places, but
-  ``AssertionError`` and ``Exception`` are not handled anywhere and
-  force-terminate analyses.
+* 避免使用制表符，改用空格缩进。虽然不一定放之四海而皆准，但是通用的标准往往是 4 个空格。从一开始就遵循这个标准是个好主意，因为合并混合使用制表符和空格缩进的代码会非常麻烦。
 
-* Avoid tabs; use space indentation instead. Even though it's wrong, the de
-  facto standard is 4 spaces. It is a good idea to adopt this from the
-  beginning, as merging code that mixes both tab and space indentation is awful.
+* 避免超长的代码行。偶尔写较长的代码行是可以的，但请记住，过长的代码行更难阅读，应尽量避免。让我们尝试将代码长度控制在 **120 个字符以内** 。
 
-* Avoid super long lines. It's okay to have longer lines, but keep in mind that
-  long lines are harder to read and should be avoided. Let's try to stick to
-  **120 characters**.
+* 避免编写过长的函数，通常将其拆分为多个小函数会更好。
 
-* Avoid extremely long functions, it is often better to break them up into
-  smaller functions.
+* 始终使用 ``_`` 而不是 ``__`` 作为私有成员（这样我们在调试时可以访问它们）。 你可能认为没有人有调用某个现有的函数的需要，但相信我们，你错了。
 
-* Always use ``_`` instead of ``__`` for private members (so that we can access
-  them when debugging). *You* might not think that anyone has a need to call a
-  given function, but trust us, you're wrong.
+* 使用 ``black`` 格式化你的代码；相关配置已定义在 ``pyproject.toml`` 文件中。
 
-* Format your code with ``black``; config is already defined within
-  ``pyproject.toml``.
+文档
+----
 
-Documentation
--------------
+请为您的代码编写文档。每个 *类定义* 和 *公共函数定义* 都应该有一些描述：
 
-Document your code. Every *class definition* and *public function definition*
-should have some description of:
+* 功能描述。
+* 参数的类型和含义。
+* 返回值的描述。
 
-* What it does.
-* What are the type and the meaning of the parameters.
-* What it returns.
+我们的代码检查工具 linter 会强制要求编写类的文档字符串（docstring）。在任何情况下，你都不应该编写一个除了类名之外没有提供任何额外信息的类。您应该尽量描述该类适用的环境。如果该类不应由最终用户实例化，请描述它是如何生成的以及如何获取其实例。如果该类可以由最终用户实例化，请解释它代表的核心对象类型、参数的预期行为以及如何安全地管理该类型的对象。
 
-Class docstrings will be enforced by our linter. Do *not* under any
-circumstances write a docstring which doesn't provide more information than the
-name of the class. What you should try to write is a description of the
-environment that the class should be used in. If the class should not be
-instantiated by end-users, write a description of where it will be generated and
-how instances can be acquired. If the class should be instantiated by end-users,
-explain what kind of object it represents at its core, what behavior is expected
-of its parameters, and how to safely manage objects of its type.
+我们使用 `Sphinx <http://www.sphinx-doc.org/en/stable/>`_ 生成 API 文档。Sphinx 支持用 `ReStructured Text <http://openalea.gforge.inria.fr/doc/openalea/doc/_build/html/source/sphinx/rest_syntax.html#auto-document-your-python-code>`_ 编写的文档字符串，并使用特殊的 `关键字 <http://www.sphinx-doc.org/en/stable/domains.html#info-field-lists>`_ 来记录函数和类的参数、返回值、返回类型、成员等。
 
-We use `Sphinx <http://www.sphinx-doc.org/en/stable/>`_ to generate the API
-documentation. Sphinx supports docstrings written in `ReStructured Text
-<http://openalea.gforge.inria.fr/doc/openalea/doc/_build/html/source/sphinx/rest_syntax.html#auto-document-your-python-code>`_
-with special `keywords
-<http://www.sphinx-doc.org/en/stable/domains.html#info-field-lists>`_ to
-document function and class parameters, return values, return types, members,
-etc.
-
-Here is an example of function documentation. Ideally the parameter descriptions
-should be aligned vertically to make the docstrings as readable as possible.
+以下是一个函数文档的示例。理想情况下，参数描述应垂直对齐，以提高文档字符串的可读性。
 
 .. code-block:: python
 
@@ -142,11 +88,7 @@ should be aligned vertically to make the docstrings as readable as possible.
        :rtype:             PathGroup
        """
 
-This format has the advantage that the function parameters are clearly
-identified in the generated documentation. However, it can make the
-documentation repetitive, in some cases a textual description can be more
-readable. Pick the format you feel is more appropriate for the functions or
-classes you are documenting.
+这种格式的优点是生成的文档中函数参数的描述非常清晰。但在某些情况下，文字描述可能更简洁易读，可以根据需要选择更适合的格式。例如：
 
 .. code-block:: python
 
@@ -155,25 +97,13 @@ classes you are documenting.
        Read `n` bytes at address `addr` in memory and return an array of bytes.
        """
 
-Unit tests
-----------
+单元测试
+--------
 
-If you're pushing a new feature and it is not accompanied by a test case it
-**will be broken** in very short order. Please write test cases for your stuff.
+如果您提交了一个新功能但没有提供测试用例，该功能 **很快就会被破坏**。因此，请为您的代码编写测试用例。
 
-We have an internal CI server to run tests to check functionality and regression
-on each commit. In order to have our server run your tests, write your tests in
-a format acceptable to `nosetests <https://nose.readthedocs.org/en/latest/>`_ in
-a file matching ``test_*.py`` in the ``tests`` folder of the appropriate
-repository. A test file can contain any number of functions of the form ``def
-test_*():`` or classes of the form ``class Test*(unittest.TestCase):``. Each of
-them will be run as a test, and if they raise any exceptions or assertions, the
-test fails. Do not use the ``nose.tools.assert_*`` functions, as we are
-presently trying to migrate to ``nose2``. Use ``assert`` statements with
-descriptive messages or the ``unittest.TestCase`` assert methods.
+我们有一个内部 CI 服务器，会在每次提交时运行测试，以检查功能和回归情况。为了让我们的服务器运行你的测试，请在适当的仓库的 ``tests`` 文件夹中编写符合 `nosetests <https://nose.readthedocs.org/en/latest/>`_ 接受格式的测试文件，文件名应以 ``test_*.py`` 命名。一个测试文件可以包含任意数量的形式为 ``def test_*():`` 的函数或形式为 ``class Test*(unittest.TestCase):`` 的类。每个函数或类都将作为一个测试运行，如果它们引发任何异常或断言，测试将失败。不要使用 ``nose.tools.assert_*`` 函数，因为我们目前正在尝试迁移到 ``nose2``。使用带有描述性消息的 ``assert`` 语句或 ``unittest.TestCase`` 的断言方法。
 
-Look at the existing tests for examples. Many of them use an alternate format
-where the ``test_*`` function is actually a generator that yields tuples of
-functions to call and their arguments, for easy parametrization of tests.
+查看现有的测试代码作为示例。许多测试使用另一种格式，其中 ``test_*`` 函数实际上是一个生成器，生成要调用的函数及其参数的元组，便于测试的参数化。
 
-Finally, do not add docstrings to your test functions.
+最后，不要为测试函数添加文档字符串。

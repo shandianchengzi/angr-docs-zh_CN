@@ -1,48 +1,34 @@
-Introduction
-============
+介绍
+====
 
-angr is a multi-architecture binary analysis toolkit, with the capability to
-perform dynamic symbolic execution (like Mayhem, KLEE, etc.) and various static
-analyses on binaries. If you'd like to learn how to use it, you're in the right
-place!
+angr 是一个支持多种指令架构的二进制分析工具包，能够执行动态符号执行（包含 Mayhem、KLEE 等功能）以及对二进制文件进行各种静态分析。如果你想学习如何使用它，你来对地方了！
 
-We've tried to make using angr as pain-free as possible - our goal is to create
-a user-friendly binary analysis suite, allowing a user to simply start up
-iPython and easily perform intensive binary analyses with a couple of commands.
-That being said, binary analysis is complex, which makes angr complex. This
-documentation is an attempt to help out with that, providing narrative
-explanation and exploration of angr and its design.
+我们尽量让使用 angr 变得尽可能简单——我们的目标是创建一个用户友好的二进制分析套件，允许用户简单地启动 iPython 并通过几个命令轻松执行密集的二进制分析。话虽如此，二进制分析是复杂的，这让 angr 也很复杂。本文档试图解决这个问题，提供对 angr 及其设计的详解和探索方式。
 
-Several challenges must be overcome to programmatically analyze a binary. They
-are, roughly:
+要编程分析一个二进制文件，必须克服几个挑战。它们大致是：
 
-* Loading a binary into the analysis program.
-* Translating a binary into an intermediate representation (IR).
-* Performing the actual analysis. This could be:
+* 将二进制文件加载到分析程序中。
+* 将二进制文件转换为中间代码（IR）。
+* 执行实际分析。这可能是：
 
-  * A partial or full-program static analysis (i.e., dependency analysis,
-    program slicing).
-  * A symbolic exploration of the program's state space (i.e., "Can we execute
-    it until we find an overflow?").
-  * Some combination of the above (i.e., "Let's execute only program slices that
-    lead to a memory write, to find an overflow.")
+  * 部分或全程序静态分析（例如，依赖分析，程序切片）。
+  * 程序状态空间的符号探索（例如，“我们能执行它直到找到溢出吗？”）。
+  * 上述的分析过程的组合（例如，“让我们只执行与内存写入相关的程序切片，以找到溢出。”）
 
-angr has components that meet all of these challenges. This documentation will
-explain how each component works, and how they can all be used to accomplish
-your goals.
+angr 有应对以上所述的所有挑战的组件。本文件将解释每个组件的工作原理，以及如何通过它们来实现你的目标。
 
-Getting Support
----------------
+获取支持
+--------
 
-To get help with angr, you can:
+要获得 angr 的帮助，你可以：
 
-* Chat with us on the `angr Discord server <http://discord.angr.io>`_
-* Open an issue on the appropriate GitHub repository
+* 在 `angr Discord 服务器 <http://discord.angr.io>`_ 上与我们聊天
+* 在相应的 GitHub 仓库中打开一个 Issue
 
-Citing angr
------------
+引用 angr
+--------
 
-If you use angr in an academic work, please cite the papers for which it was developed:
+如果你在学术作品中使用了 angr，请引用为其发布的论文：
 
 .. code-block:: bibtex
 
@@ -67,16 +53,11 @@ If you use angr in an academic work, please cite the papers for which it was dev
      year={2015}
    }
 
-Going further
--------------
+深入了解
+--------
 
-You can read this `paper
-<https://www.cs.ucsb.edu/~vigna/publications/2016_SP_angrSoK.pdf>`_,
-explaining some of the internals, algorithms, and used techniques to get a
-better understanding on what's going on under the hood.
+你可以阅读这篇 `论文
+<https://www.cs.ucsb.edu/~vigna/publications/2016_SP_angrSoK.pdf>`_，
+解释了一些内部原理、算法和使用的技术，以更好地理解底层发生的事情。
 
-If you enjoy playing CTFs and would like to learn angr in a similar fashion,
-`angr_ctf <https://github.com/jakespringer/angr_ctf>`_ will be a fun way for you
-to get familiar with much of the symbolic execution capability of angr. `The
-angr_ctf repo <https://github.com/jakespringer/angr_ctf>`_ is maintained by
-`@jakespringer <https://github.com/jakespringer>`_.
+如果你喜欢打 CTF 并希望以类似的方式学习 angr，`angr_ctf <https://github.com/jakespringer/angr_ctf>`_ 将是一个有趣的方式，让你熟悉 angr 的许多符号执行功能。 `angr_ctf 这个仓库 <https://github.com/jakespringer/angr_ctf>`_ 由 `@jakespringer <https://github.com/jakespringer>`_ 维护。

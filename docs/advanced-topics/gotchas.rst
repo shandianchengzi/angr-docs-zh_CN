@@ -1,4 +1,4 @@
-Gotchas when using angr
+使用 angr 时的注意事项
 =======================
 
 This section contains a list of gotchas that users/victims of angr frequently

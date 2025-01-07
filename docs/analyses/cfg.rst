@@ -1,4 +1,4 @@
-Control-flow Graph Recovery (CFG)
+控制流图（CFG）恢复
 =================================
 
 angr includes analyses to recover the control-flow graph of a binary program.

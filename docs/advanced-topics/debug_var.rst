@@ -1,9 +1,7 @@
-Debug variable resolution
+如何调试变量（仅限于有调试信息的二进制文件）
 =========================
 
-angr now support resolve source level variable (debug variable) in
-binary with debug information. This article will introduce you how to
-use it.
+angr 现在支持在带有调试信息的二进制文件中解析源级变量（调试变量）。本文将介绍如何使用它。
 
 Setting up
 ----------
@@ -83,12 +81,10 @@ to resolve it. For struct type you can resolve its member by
 ``.member("member_name").mem``. For array type you can use
 ``.array(index).mem`` to access the element in array.
 
-Variable visibility
-===================
+如何查看当前可用的变量
+==========
 
-If you have many variable with the same name but in different scope,
-calling ``state.dvars['var_name']`` would resolve the variable with the
-nearest scope.
+如果你有许多同名但在不同作用域的变量，调用 ``state.dvars['var_name']`` 会解析最近作用域的变量。
 
 Example:
 

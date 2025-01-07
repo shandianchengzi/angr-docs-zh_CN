@@ -1,13 +1,7 @@
-Symbolic memory addressing
+内存寻址符号化（Symbolic memory addressing）
 ==========================
 
-angr supports *symbolic memory addressing*, meaning that offsets into memory may
-be symbolic. Our implementation of this is inspired by "Mayhem". Specifically,
-this means that angr concretizes symbolic addresses when they are used as the
-target of a write. This causes some surprises, as users tend to expect symbolic
-writes to be treated purely symbolically, or "as symbolically" as we treat
-symbolic reads, but that is not the default behavior. However, like most things
-in angr, this is configurable.
+angr 支持 *符号内存寻址* ，这意味着内存偏移量可以是符号的。我们的实现灵感来自 "Mayhem"。具体来说，这意味着 angr 在符号地址被用作写入目标时会将其具体化。这会引起一些意外，因为用户往往期望符号写入被纯粹地符号化处理，或者像我们处理符号读取一样“符号化”，但这不是默认行为。然而，像 angr 中的大多数事情一样，这是可配置的。
 
 The address resolution behavior is governed by *concretization strategies*,
 which are subclasses of

@@ -1,31 +1,22 @@
-Help Wanted
+欢迎贡献
 ===========
 
 .. todo::
-   This page is woefully out of date. We need to update it.
+   这个页面已经过时了。我们需要更新它。
 
-angr is a huge project, and it's hard to keep up. Here, we list some big TODO
-items that we would love community contributions for in the hope that it can
-direct community involvement. They (will) have a wide range of complexity, and
-there should be something for all skill levels!
+angr 是一个庞大的项目，保持更新非常困难。在这里，我们列出了一些我们非常希望社区贡献的重大待办事项，希望能够引导社区参与。它们（将）具有广泛的复杂度，应该能满足各个技能水平的人！
 
-We tag issues on our github repositories that would be good for community
-involvement as "Help wanted". To see the exhaustive list of these, use `this
-github search!
-<https://github.com/search?utf8=%E2%9C%93&q=user%3Aangr+label%3A%22help+wanted%22+state%3Aopen&type=Issues&ref=advsearch&l=&l=>`_
+我们在 GitHub 仓库中标记了一些适合社区参与的问题为“Help wanted”。要查看这些问题的完整列表，请使用这个 `GitHub 搜索! <https://github.com/search?utf8=%E2%9C%93&q=user%3Aangr+label%3A%22help+wanted%22+state%3Aopen&type=Issues&ref=advsearch&l=&l=>`_
 
-Documentation
+文档
 -------------
 
-There are many parts of angr that suffer from little or no documentation. We
-desperately need community help in this area.
+angr 的许多部分都缺乏文档或没有文档。我们在这个领域迫切需要社区的帮助。
 
 API
 ^^^
 
-We are always behind on documentation. We've created several tracking issues on
-github to understand what's still missing:
-
+我们的文档一直滞后。我们在 github 上创建了几个相关的 issue，以了解还缺少什么：
 
 #. `angr <https://github.com/angr/angr/issues/145>`_
 #. `claripy <https://github.com/angr/claripy/issues/17>`_
@@ -35,217 +26,132 @@ github to understand what's still missing:
 GitBook
 ^^^^^^^
 
-This book is missing some core areas. Specifically, the following could be
-improved:
+这本书还缺少一些核心内容。具体来说，以下方面可以改进：
 
+#. 完成书中的 TODO 待办事项。
+#. 重新组织示例页面，使其结构更加合理。目前，大部分示例都非常冗余。可以考虑创建一个简单的表格，列出大部分示例，以使页面不那么压抑。
 
-#. Finish some of the TODOs floating around the book.
-#. Organize the Examples page in some way that makes sense. Right now, most of
-   the examples are very redundant. It might be cool to have a simple table of
-   most of them so that the page is not so overwhelming.
-
-angr course
+angr 课程
 ^^^^^^^^^^^
 
-Developing a "course" of sorts to get people started with angr would be really
-beneficial. Steps have already been made in this direction `here
-<https://github.com/angr/angr-doc/pull/74>`_, but more expansion would be
-beneficial.
+开发一种类似“课程”的东西，以帮助人们开始使用 angr ，将非常有益。在这方面已经迈出了一些步伐 `here <https://github.com/angr/angr-doc/pull/74>`_ ，但还需要更多的扩展。
 
-Ideally, the course would have a hands-on component, of increasing difficulty,
-that would require people to use more and more of angr's capabilities.
+理想情况下，这门课程应该有一个逐渐增加难度的实践部分，要求人们使用越来越多的 angr 功能。
 
-Research re-implementation
+复现现有的相关研究工作
 --------------------------
 
-Unfortunately, not everyone bases their research on angr ;-). Until that's
-remedied, we'll need to periodically implement related work, on top of angr, to
-make it reusable within the scope of the framework. This section lists some of
-this related work that's ripe for reimplementation in angr.
+不幸的是，并不是所有的研究都基于angr ;-)。在这一点得到解决之前，我们需要定期在angr的基础上实现相关工作，以使其在框架的范围内可重用。本节列出了一些适合在 angr 中重新实现的相关工作。
 
-Redundant State Detection for Dynamic Symbolic Execution
+用于动态符号执行的冗余状态检测
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Bugrara, et al. describe a method to identify and trim redundant states,
-increasing the speed of symbolic execution by up to 50 times and coverage by 4%.
-This would be great to have in angr, as an ExplorationTechnique. The paper is
-here: `http://nsl.cs.columbia.edu/projects/minestrone/papers/atc13-bugrara.pdf
-<http://nsl.cs.columbia.edu/projects/minestrone/papers/atc13-bugrara.pdf>`_
+Bugrara 等人描述了一种方法来识别和修剪冗余状态，将符号执行的速度提高了多达 50 倍，覆盖率提高了 4%。这将对提高 angr 的探索部分非常有用。论文在这里： `http://nsl.cs.columbia.edu/projects/minestrone/papers/atc13-bugrara.pdf <http://nsl.cs.columbia.edu/projects/minestrone/papers/atc13-bugrara.pdf>`_
 
-In-Vivo Multi-Path Analysis of Software Systems
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+软件系统的多路径实时分析
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Rather than developing symbolic summaries for every system call, we can use a
-technique proposed by `S2E <http://dslab.epfl.ch/pubs/s2e.pdf>`_ for
-concretizing necessary data and dispatching them to the OS itself. This would
-make angr applicable to a *much* larger set of binaries than it can currently
-analyze.
+与其为每个系统调用开发符号摘要，我们可以使用 `S2E <http://dslab.epfl.ch/pubs/s2e.pdf>`_ 提出的一种技术，将必要的数据具体化并将其分派给操作系统本身。这将使 angr 适用于比它目前能够分析的 *更多* 二进制文件集。
 
-While this would be most useful for system calls, once it is implemented, it
-could be trivially applied to any location of code (i.e., library functions). By
-carefully choosing which library functions are handled like this, we can greatly
-increase angr's scalability.
+尽管这一技术主要对系统调用有用，但一旦实现，它也可以轻松应用于任何代码位置（例如库函数）。通过仔细选择哪些库函数使用这种方法，可以大大提高 angr 的可扩展性。（译者注：这部分好像已经实现了？叫做 `angr_symbion <https://angr.io/blog/angr_symbion/>`_ ），就是混合符号执行和具体执行的技术）
 
-Development
+开发
 -----------
 
-We have several projects in mind that primarily require development effort.
+我们有几个项目需要主要进行开发工作。
 
 angr-management
 ^^^^^^^^^^^^^^^
 
-The angr GUI, `angr-management <https://github.com/angr/angr-management>`_,
-could use your improvements! Exposing more of angr's capabilities in a usable
-way, graphically, would be really useful!
+angr GUI `angr-management <https://github.com/angr/angr-management>`_ 需要您的改进！以一种可用的图形方式更多地展示 angr 的功能将非常有用！
 
-IDA Plugins
+IDA 插件
 ^^^^^^^^^^^
 
-Much of angr's functionality could be exposed via IDA. For example, angr's data
-dependence graph could be exposed in IDA through annotations, or obfuscated
-values can be resolved using symbolic execution.
+angr 的许多功能可以通过IDA进行展示。例如，angr 的数据依赖图可以通过 IDA 中的注释进行展示，或者可以使用符号执行解析混淆的值。
 
-Additional architectures
+其他架构
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-More architecture support would make angr all the more useful.
-Supporting a new architecture with angr would involve:
+支持更多的架构将使 angr 变得更加有用。
+使用 angr 支持新的架构需要：
+
+#. 将架构信息添加到 `archinfo <https://github.com/angr/archinfo>`_
+#. 添加 IR 转换。这可以是对 PyVEX 的扩展，生成 IRSB ，或者是另一种 IR。
+#. 如果您的 IR 不是 VEX ，请添加一个 ``SimEngine`` 来支持它。
+#. 添加或修改一个 ``angr.SimCC`` 来支持 SimProcedures（包括系统调用）。
+#. 添加或修改一个 ``angr.SimOS`` 来支持初始化活动。
+#. 创建一个 CLE 后端来加载二进制文件，或者如果二进制文件格式是 ELF ，则扩展 CLE ELF 后端以识别新的架构。
+
+**新架构的想法：**
 
 
-#. Adding the architecture information to `archinfo
-   <https://github.com/angr/archinfo>`_
-#. Adding an IR translation. This may be either an extension to PyVEX, producing
-   IRSBs, or another IR entirely.
-#. If your IR is not VEX, add a ``SimEngine`` to support it.
-#. Adding a calling convention (``angr.SimCC``) to support SimProcedures
-   (including system calls)
-#. Adding or modifying an ``angr.SimOS`` to support initialization activities.
-#. Creating a CLE backend to load binaries, or extending the CLE ELF backend to
-   know about the new architecture if the binary format is ELF.
+* PIC、AVR 和其他嵌入式架构
+* SPARC（有一些初步的 SPARC 支持 `here <https://bitbucket.org/iraisr/valgrind-solaris>`_ ）
 
-**ideas for new architectures:**
+**新 IR 的想法：**
 
 
-* PIC, AVR, other embedded architectures
-* SPARC (there is some preliminary libVEX support for SPARC `here
-  <https://bitbucket.org/iraisr/valgrind-solaris>`_)
+* LLVM IR（通过这个，我们可以将 angr 从仅仅是一个二进制分析框架扩展为一个程序分析框架，并在其他方面扩展其功能！）
+* SOOT（没有理由 angr 不能分析 Java 代码，尽管这样做需要对我们的内存模型进行一些扩展）
 
-**ideas for new IRs:**
-
-
-* LLVM IR (with this, we can extend angr from just a Binary Analysis Framework
-  to a Program Analysis Framework and expand its capabilities in other ways!)
-* SOOT (there is no reason that angr can't analyze Java code, although doing so
-  would require some extensions to our memory model)
-
-Environment support
+环境支持
 ^^^^^^^^^^^^^^^^^^^
 
-We use the concept of "function summaries" in angr to model the environment of
-operating systems (i.e., the effects of their system calls) and library
-functions. Extending this would be greatly helpful in increasing angr's utility.
-These function summaries can be found `here
-<https://github.com/angr/angr/tree/master/angr/procedures>`_.
+我们在 angr 中使用“函数摘要”的概念来模拟操作系统的环境（即其系统调用的效果）和库函数。扩展这一概念将极大地增加 angr 的实用性。这些函数摘要可以在 `这里 <https://github.com/angr/angr/tree/master/angr/procedures>`_ 找到。
 
-A specific subset of this is system calls. Even more than library function
-SimProcedures (without which angr can always execute the actual function), we
-have very few workarounds for missing system calls. Every implemented system
-call extends the set of binaries that angr can handle.
+其中一个特定的子集是系统调用。与库函数 SimProcedures 相比（如果没有这些函数，angr 总是可以执行实际的函数），我们对于缺少的系统调用几乎没有解决方案。每个实现的系统调用都扩展了 angr 可以处理的二进制文件集。
 
-Design Problems
+设计问题
 ---------------
 
-There are some outstanding design challenges regarding the integration of
-additional functionalities into angr.
+关于将其他功能集成到 angr 中存在一些未解决的设计挑战。
 
-Type annotation and type information usage
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+类型注释和类型信息的使用
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-angr has fledgling support for types, in the sense that it can parse them out of
-header files. However, those types are not well exposed to do anything useful
-with. Improving this support would make it possible to, for example, annotate
-certain memory regions with certain type information and interact with them
-intelligently. Consider, for example, interacting with a linked list like this:
-``print state.mem[state.regs.rax].llist.next.next.value``.
+angr 对类型的支持还处于初级阶段，它可以从头文件中解析出类型。然而，这些类型没有很好地暴露出来，无法做任何有用的事情。改进这种支持将使得可能对某些内存区域进行某些类型信息的注释，并与其进行智能交互。例如，考虑与链表交互的情况：``print state.mem[state.regs.rax].llist.next.next.value``。
 
-(editor's note: you can actually already do this)
+（编辑者注：实际上，您已经可以做到这一点）
 
-Research Challenges
+研究挑战
 -------------------
 
-Historically, angr has progressed in the course of research into novel areas of
-program analysis. Here, we list several self-contained research projects that
-can be tackled.
+在 angr 的发展历程中，它一直在研究程序分析的新领域。在这里，我们列出了几个可以解决的独立研究项目。
 
-Semantic function identification/diffing
+语义函数识别/差异化
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Current function diffing techniques (TODO: some examples) have drawbacks. For
-the CGC, we created a semantic-based binary identification engine (
-`https://github.com/angr/identifier <https://github.com/angr/identifier>`_)
-that can identify functions based on testcases. There are two areas of
-improvement, each of which is its own research project:
+当前的函数差异化技术（TODO：一些示例）存在一些缺点。对于 CGC，我们创建了一个基于语义的二进制识别引擎（ `https://github.com/angr/identifier <https://github.com/angr/identifier>`_ ），它可以根据测试用例识别函数。有两个改进的方向，每个方向都是一个独立的研究项目：
 
+#. 目前，该组件使用的测试用例是人工生成的。然而，可以使用符号执行来自动生成可用于识别其他二进制文件中给定函数实例的测试用例。
+#. 通过创建达到“足够高”的代码覆盖率的测试用例，我们可以通过将这组测试用例应用于同一函数的另一个实现并分析代码覆盖率的变化来检测功能的变化。这可以作为语义函数差异的依据。
 
-#. Currently, the testcases used by this component are human-generated. However,
-   symbolic execution can be used to automatically generate testcases that can
-   be used to recognize instances of a given function in other binaries.
-#. By creating testcases that achieve a "high-enough" code coverage of a given
-   function, we can detect changes in functionality by applying the set of
-   testcases to another implementation of the same function and analyzing
-   changes in code coverage. This can then be used as a semantic function diff.
+将 AFL 的路径选择标准应用于符号执行
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Applying AFL's path selection criteria to symbolic execution
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AFL 在模糊测试中通过跟踪每个路径的控制流转换，出色地识别了“独特”的路径。同样的标准可以应用于符号探索，考虑到其简单性，效果可能相当好。
 
-AFL does an excellent job in identifying "unique" paths during fuzzing by
-tracking the control flow transitions taken by every path. This same metric can
-be applied to symbolic exploration, and would probably do a depressingly good
-job, considering how simple it is.
-
-Overarching Research Directions
+总体研究方向
 -------------------------------
 
-There are areas of program analysis that are not well explored. We list general
-directions of research here, but readers should keep in mind that these
-directions likely describe potential undertakings of entire PhD dissertations.
+在程序分析领域，有一些未被充分探索的方向。我们在这里列出了几个研究的总体方向，但读者应当注意，这些方向很可能描述的是完整博士论文的潜在课题。
 
-Process interactions
+进程交互
 ^^^^^^^^^^^^^^^^^^^^
 
-Almost all work in the field of binary analysis deals with single binaries, but
-this is often unrealistic in the real world. For example, the type of input that
-can be passed to a CGI program depend on pre-processing by a web server.
-Currently, there is no way to support the analysis of multiple concurrent
-processes in angr, and many open questions in the field (i.e., how to model
-concurrent actions).
+几乎所有二进制分析领域的工作都集中在单一二进制文件上，但在现实世界中，通常并不如此。例如，传递给 CGI 程序的输入类型依赖于 Web 服务器的预处理。目前，angr 没有办法支持多个并发进程的分析，且在该领域存在许多未解问题（例如，如何建模并发行为）。
 
-Intra-process concurrency
+进程内并发
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Similar to the modeling of interactions between processes, little work has been
-done in understanding the interaction of concurrent threads in the same process.
-Currently, angr has no way to reason about this, and it is unclear from the
-theoretical perspective how to approach this.
+与进程之间的交互建模类似，对于同一进程中并发线程的交互了解还很少。目前，angr 无法对此进行推理，从理论角度来看，如何处理这个问题还不清楚。
 
-A subset of this problem is the analysis of signal handlers (or hardware
-interrupts). Each signal handler can be modeled as a thread that can be executed
-at any time that a signal can be triggered. Understanding when it is meaningful
-to analyze these handlers is an open problem. One system that does reason about
-the effect of interrupts is `FIE <http://pages.cs.wisc.edu/~davidson/fie/>`_.
+这个问题的一个子集是分析信号处理程序（或硬件中断）。每个信号处理程序可以被建模为一个可以在触发信号时的任何时间执行的线程。了解何时分析这些处理程序是一个开放的问题。一个可以推理中断效果的系统是 `FIE <http://pages.cs.wisc.edu/~davidson/fie/>`_。
 
-Path explosion
+路径爆炸
 ^^^^^^^^^^^^^^
 
-Many approaches (such as `Veritesting
-<https://users.ece.cmu.edu/~dbrumley/pdf/Avgerinos et al._2014_Enhancing
-Symbolic Execution with Veritesting.pdf>`_) attempt to mitigate the path
-explosion problem in symbolic execution. However, despite these efforts, path
-explosion is still *the* main problem preventing symbolic execution from being
-mainstream.
+许多方法（例如 `Veritesting <https://users.ece.cmu.edu/~dbrumley/pdf/Avgerinos et al._2014_Enhancing Symbolic Execution with Veritesting.pdf>`_ ）试图缓解符号执行中的路径爆炸问题。然而，尽管有这些努力，路径爆炸仍然是阻碍符号执行成为主流的主要问题。
 
-angr provides an excellent base to implement new techniques to control path
-explosion. Most approaches can be easily implemented as
-:py:class:`~angr.exploration_techniques.ExplorationTechnique` s and quickly
-evaluated (for example, on the `CGC dataset
-<https://github.com/CyberGrandChallenge/samples>`_).
+angr 提供了一个出色的基础来实现控制路径爆炸的新技术。大多数方法可以很容易地实现为 :py:class:`~angr.exploration_techniques.ExplorationTechnique` ，并快速评估（例如，在 `CGC 数据集 <https://github.com/CyberGrandChallenge/samples>`_ 上）。
