@@ -46,7 +46,7 @@ Simulation Managers
 
    simgr.use_technique(angr.exploration_techniques.DFS())
 
-Symbolically execute until we find a state satisfying our ``find=`` and ``avoid=`` parameters
+符号执行直到找到满足 ``find=`` 和 ``avoid=`` 参数的状态
 
 .. code-block:: python
 
