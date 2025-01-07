@@ -6,6 +6,8 @@ from __future__ import annotations
 
 import datetime
 
+from multiproject.utils import get_project
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -28,6 +30,25 @@ extensions = [
     "sphinx_autodoc_typehints",
     "myst_parser",
 ]
+
+multiproject_projects = {
+    "en": {
+        "use_config_file": False,
+        "config": {
+            "project": "angr documentation",
+            "html_title": "angr documentation",
+        },
+    },
+    "zh_CN": {
+        "use_config_file": False,
+        "config": {
+            "project": "angr 文档",
+            "html_title": "angr 文档",
+        },
+    },
+}
+
+docset = get_project(multiproject_projects)
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -74,4 +95,4 @@ todo_include_todos = True
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "furo"
-html_static_path = ["_static"]
+html_static_path = ["_static", f"{docset}/_static"]
