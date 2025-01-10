@@ -129,222 +129,210 @@ These events expose different attributes:
 .. list-table::
    :header-rows: 1
 
-   * - Event type
-     - Attribute name
-     - Attribute availability
-     - Attribute meaning
+   * - 事件类型
+     - 属性名称
+     - 属性可用性
+     - 属性含义
    * - mem_read
      - mem_read_address
-     - BP_BEFORE or BP_AFTER
-     - The address at which memory is being read.
+     - BP_BEFORE 或 BP_AFTER
+     - 正在读取内存的地址。
    * - mem_read
      - mem_read_expr
      - BP_AFTER
-     - The expression at that address.
+     - 该地址处的表达式。
    * - mem_read
      - mem_read_length
-     - BP_BEFORE or BP_AFTER
-     - The length of the memory read.
+     - BP_BEFORE 或 BP_AFTER
+     - 内存读取的长度。
    * - mem_read
      - mem_read_condition
-     - BP_BEFORE or BP_AFTER
-     - The condition of the memory read.
+     - BP_BEFORE 或 BP_AFTER
+     - 内存读取的条件。
    * - mem_write
      - mem_write_address
-     - BP_BEFORE or BP_AFTER
-     - The address at which memory is being written.
+     - BP_BEFORE 或 BP_AFTER
+     - 正在写入内存的地址。
    * - mem_write
      - mem_write_length
-     - BP_BEFORE or BP_AFTER
-     - The length of the memory write.
+     - BP_BEFORE 或 BP_AFTER
+     - 内存写入的长度。
    * - mem_write
      - mem_write_expr
-     - BP_BEFORE or BP_AFTER
-     - The expression that is being written.
+     - BP_BEFORE 或 BP_AFTER
+     - 正在写入的表达式。
    * - mem_write
      - mem_write_condition
-     - BP_BEFORE or BP_AFTER
-     - The condition of the memory write.
+     - BP_BEFORE 或 BP_AFTER
+     - 内存写入的条件。
    * - reg_read
      - reg_read_offset
-     - BP_BEFORE or BP_AFTER
-     - The offset of the register being read.
+     - BP_BEFORE 或 BP_AFTER
+     - 正在读取的寄存器的偏移量。
    * - reg_read
      - reg_read_length
-     - BP_BEFORE or BP_AFTER
-     - The length of the register read.
+     - BP_BEFORE 或 BP_AFTER
+     - 寄存器读取的长度。
    * - reg_read
      - reg_read_expr
      - BP_AFTER
-     - The expression in the register.
+     - 寄存器中的表达式。
    * - reg_read
      - reg_read_condition
-     - BP_BEFORE or BP_AFTER
-     - The condition of the register read.
+     - BP_BEFORE 或 BP_AFTER
+     - 寄存器读取的条件。
    * - reg_write
      - reg_write_offset
-     - BP_BEFORE or BP_AFTER
-     - The offset of the register being written.
+     - BP_BEFORE 或 BP_AFTER
+     - 正在写入的寄存器的偏移量。
    * - reg_write
      - reg_write_length
-     - BP_BEFORE or BP_AFTER
-     - The length of the register write.
+     - BP_BEFORE 或 BP_AFTER
+     - 寄存器写入的长度。
    * - reg_write
      - reg_write_expr
-     - BP_BEFORE or BP_AFTER
-     - The expression that is being written.
+     - BP_BEFORE 或 BP_AFTER
+     - 正在写入的表达式。
    * - reg_write
      - reg_write_condition
-     - BP_BEFORE or BP_AFTER
-     - The condition of the register write.
+     - BP_BEFORE 或 BP_AFTER
+     - 寄存器写入的条件。
    * - tmp_read
      - tmp_read_num
-     - BP_BEFORE or BP_AFTER
-     - The number of the temp being read.
+     - BP_BEFORE 或 BP_AFTER
+     - 正在读取的临时变量的编号。
    * - tmp_read
      - tmp_read_expr
      - BP_AFTER
-     - The expression of the temp.
+     - 临时变量的表达式。
    * - tmp_write
      - tmp_write_num
-     - BP_BEFORE or BP_AFTER
-     - The number of the temp written.
+     - BP_BEFORE 或 BP_AFTER
+     - 正在写入的临时变量的编号。
    * - tmp_write
      - tmp_write_expr
      - BP_AFTER
-     - The expression written to the temp.
+     - 写入临时变量的表达式。
    * - expr
      - expr
-     - BP_BEFORE or BP_AFTER
-     - The IR expression.
+     - BP_BEFORE 或 BP_AFTER
+     - IR 表达式。
    * - expr
      - expr_result
      - BP_AFTER
-     - The value (e.g. AST) which the expression was evaluated to.
+     - 表达式的值（例如 AST）。
    * - statement
      - statement
-     - BP_BEFORE or BP_AFTER
-     - The index of the IR statement (in the IR basic block).
+     - BP_BEFORE 或 BP_AFTER
+     - IR 语句的索引（在 IR 基本块中）。
    * - instruction
      - instruction
-     - BP_BEFORE or BP_AFTER
-     - The address of the native instruction.
+     - BP_BEFORE 或 BP_AFTER
+     - 本机指令的地址。
    * - irsb
      - address
-     - BP_BEFORE or BP_AFTER
-     - The address of the basic block.
+     - BP_BEFORE 或 BP_AFTER
+     - 基本块的地址。
    * - constraints
      - added_constraints
-     - BP_BEFORE or BP_AFTER
-     - The list of constraint expressions being added.
+     - BP_BEFORE 或 BP_AFTER
+     - 正在添加的约束表达式列表。
    * - call
      - function_address
-     - BP_BEFORE or BP_AFTER
-     - The name of the function being called.
+     - BP_BEFORE 或 BP_AFTER
+     - 被调用的函数的名称。
    * - exit
      - exit_target
-     - BP_BEFORE or BP_AFTER
-     - The expression representing the target of a SimExit.
+     - BP_BEFORE 或 BP_AFTER
+     - 表示 SimExit 的目标的表达式。
    * - exit
      - exit_guard
-     - BP_BEFORE or BP_AFTER
-     - The expression representing the guard of a SimExit.
+     - BP_BEFORE 或 BP_AFTER
+     - 表示 SimExit 的保护条件的表达式。
    * - exit
      - exit_jumpkind
-     - BP_BEFORE or BP_AFTER
-     - The expression representing the kind of SimExit.
+     - BP_BEFORE 或 BP_AFTER
+     - 表示 SimExit 类型的表达式。
    * - symbolic_variable
      - symbolic_name
      - BP_AFTER
-     - The name of the symbolic variable being created. The solver engine might
-       modify this name (by appending a unique ID and length). Check the
-       symbolic_expr for the final symbolic expression.
+     - 正在创建的符号变量的名称。求解器引擎可能会修改此名称（通过附加唯一的 ID 和长度）。检查最终的符号表达式。
    * - symbolic_variable
      - symbolic_size
      - BP_AFTER
-     - The size of the symbolic variable being created.
+     - 正在创建的符号变量的大小。
    * - symbolic_variable
      - symbolic_expr
      - BP_AFTER
-     - The expression representing the new symbolic variable.
+     - 表示新符号变量的表达式。
    * - address_concretization
      - address_concretization_strategy
-     - BP_BEFORE or BP_AFTER
-     - The SimConcretizationStrategy being used to resolve the address. This can
-       be modified by the breakpoint handler to change the strategy that will be
-       applied. If your breakpoint handler sets this to None, this strategy will
-       be skipped.
+     - BP_BEFORE 或 BP_AFTER
+     - 用于解析地址的 SimConcretizationStrategy。断点处理程序可以修改此策略以更改将应用的策略。如果断点处理程序将其设置为 None，则将跳过此策略。
    * - address_concretization
      - address_concretization_action
-     - BP_BEFORE or BP_AFTER
-     - The SimAction object being used to record the memory action.
+     - BP_BEFORE 或 BP_AFTER
+     - 用于记录内存操作的 SimAction 对象。
    * - address_concretization
      - address_concretization_memory
-     - BP_BEFORE or BP_AFTER
-     - The SimMemory object on which the action was taken.
+     - BP_BEFORE 或 BP_AFTER
+     - 执行操作的 SimMemory 对象。
    * - address_concretization
      - address_concretization_expr
-     - BP_BEFORE or BP_AFTER
-     - The AST representing the memory index being resolved. The breakpoint
-       handler can modify this to affect the address being resolved.
+     - BP_BEFORE 或 BP_AFTER
+     - 表示正在解析的内存索引的 AST。断点处理程序可以修改此值以影响正在解析的地址。
    * - address_concretization
      - address_concretization_add_constraints
-     - BP_BEFORE or BP_AFTER
-     - Whether or not constraints should/will be added for this read.
+     - BP_BEFORE 或 BP_AFTER
+     - 是否应该/将要为此读取添加约束。
    * - address_concretization
      - address_concretization_result
      - BP_AFTER
-     - The list of resolved memory addresses (integers). The breakpoint handler
-       can overwrite these to effect a different resolution result.
+     - 已解析的内存地址列表（整数）。断点处理程序可以覆盖这些以产生不同的解析结果。
    * - syscall
      - syscall_name
-     - BP_BEFORE or BP_AFTER
-     - The name of the system call.
+     - BP_BEFORE 或 BP_AFTER
+     - 系统调用的名称。
    * - simprocedure
      - simprocedure_name
-     - BP_BEFORE or BP_AFTER
-     - The name of the simprocedure.
+     - BP_BEFORE 或 BP_AFTER
+     - simprocedure 的名称。
    * - simprocedure
      - simprocedure_addr
-     - BP_BEFORE or BP_AFTER
-     - The address of the simprocedure.
+     - BP_BEFORE 或 BP_AFTER
+     - simprocedure 的地址。
    * - simprocedure
      - simprocedure_result
      - BP_AFTER
-     - The return value of the simprocedure. You can also *override* it in
-       BP_BEFORE, which will cause the actual simprocedure to be skipped and for
-       your return value to be used instead.
-   * - simprocedure
+     - simprocedure 的返回值。您还可以在 BP_BEFORE 中 *覆盖* 它，这将导致实际的 simprocedure 被跳过，而使用您的返回值。
+     * - simprocedure
      - simprocedure
-     - BP_BEFORE or BP_AFTER
-     - The actual SimProcedure object.
-   * - dirty
+     - BP_BEFORE 或 BP_AFTER
+     - 实际的 SimProcedure 对象。
+     * - dirty
      - dirty_name
-     - BP_BEFORE or BP_AFTER
-     - The name of the dirty call.
-   * - dirty
+     - BP_BEFORE 或 BP_AFTER
+     - dirty 调用的名称。
+     * - dirty
      - dirty_handler
      - BP_BEFORE
-     - The function that will be run to handle the dirty call. You can override
-       this.
-   * - dirty
+     - 将用于处理 dirty 调用的函数。您可以覆盖它。
+     * - dirty
      - dirty_args
-     - BP_BEFORE or BP_AFTER
-     - The address of the dirty.
-   * - dirty
+     - BP_BEFORE 或 BP_AFTER
+     - dirty 的地址。
+     * - dirty
      - dirty_result
      - BP_AFTER
-     - The return value of the dirty call. You can also *override* it in
-       BP_BEFORE, which will cause the actual dirty call to be skipped and for
-       your return value to be used instead.
-   * - engine_process
+     - dirty 调用的返回值。您还可以在 BP_BEFORE 中 *覆盖* 它，这将导致实际的 dirty 调用被跳过，而使用您的返回值。
+     * - engine_process
      - sim_engine
-     - BP_BEFORE or BP_AFTER
-     - The SimEngine that is processing.
-   * - engine_process
+     - BP_BEFORE 或 BP_AFTER
+     - 正在处理的 SimEngine。
+     * - engine_process
      - successors
-     - BP_BEFORE or BP_AFTER
-     - The SimSuccessors object defining the result of the engine.
+     - BP_BEFORE 或 BP_AFTER
+     - 定义引擎结果的 SimSuccessors 对象。
 
 
 在对应断点 callback 函数内，这些属性可以作为 ``state.inspect`` 的成员被访问。你甚至可以修改这些成员的值，并进一步使用！
